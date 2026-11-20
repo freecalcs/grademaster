@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)file:///C:/Users/ericm/Downloads/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeMaster — Grade &amp; GPA Calculator</title>
+<style>
+:root{--bg:#0b1020;--panel:#141c31;--panel2:#1b2741;--text:#eef3ff;--muted:#a7b4cf;--line:#2b3958;--accent:#7c9cff;--green:#55d6a2;--orange:#ffc46b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172747 0%,var(--bg) 55%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial}
+.wrap{max-width:1100px;margin:auto;padding:28px 18px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c9cff,#8e72ef);display:grid;place-items:center;font-size:23px;font-weight:800}
+h1{font-size:24px;margin:0;letter-spacing:-.5px}.sub{color:var(--muted);font-size:13px}.pill{border:1px solid var(--line);border-radius:99px;padding:7px 12px;color:var(--green);font-size:12px}
+.hero{margin:20px 0 24px}.hero h2{font-size:clamp(26px,5vw,38px);line-height:1.1;margin:0 0 8px}.hero p{color:var(--muted);margin:0;max-width:650px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{background:linear-gradient(180deg,rgba(27,39,65,.96),rgba(20,28,49,.96));border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 12px 35px #0002}
+.card h3{margin:0 0 15px;font-size:17px}.row{display:flex;gap:12px;align-items:end}.field{flex:1;min-width:0;margin-bottom:12px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+input,select{width:100%;background:#0e1629;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;outline:none}
+input:focus,select:focus{border-color:var(--accent)}button{border:0;border-radius:10px;padding:11px 15px;font:600 14px system-ui;cursor:pointer;background:var(--accent);color:#091126}
+button.secondary{background:#263653;color:var(--text);border:1px solid var(--line)}button.danger{background:#432b3a;color:#ffd9e1;border:1px solid #714155}
+button:hover{filter:brightness(1.08)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}
+.category{display:grid;grid-template-columns:1.4fr .8fr .8fr auto;gap:8px;align-items:center;margin:8px 0}.category input{padding:9px}
+.small{font-size:12px;color:var(--muted)}.divider{height:1px;background:var(--line);margin:16px 0}
+.result{background:#0e172b;border:1px solid var(--line);border-radius:14px;padding:16px;margin:10px 0}
+.big{font-size:34px;font-weight:800;letter-spacing:-1px}.green{color:var(--green)}.blue{color:#a8bbff}.orange{color:var(--orange)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#0e172b;border:1px solid var(--line);border-radius:12px;padding:13px}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
+.class-list{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.class-chip{background:#263653;color:var(--text);border:1px solid var(--line);padding:8px 11px;border-radius:99px;cursor:pointer}.class-chip.active{border-color:var(--accent);background:#344a79}
+.note{font-size:12px;color:var(--muted);margin-top:12px}.bar{height:8px;background:#263653;border-radius:99px;overflow:hidden;margin-top:8px}.bar>div{height:100%;background:linear-gradient(90deg,#7c9cff,#55d6a2);width:0}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:22px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.category{grid-template-columns:1.2fr .8fr .8fr auto}.wrap{padding:20px 13px 45px}}
+@media(max-width:430px){.category{grid-template-columns:1fr 1fr 1fr auto}.category input{font-size:12px;padding:9px 7px}.row{gap:8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">G</div><div><h1>GradeMaster</h1><div class="sub">Your grades. Your goals. Your plan.</div></div></div>
+    <div class="pill">FREE STARTER VERSION</div>
+  </header>
+  <section class="hero"><h2>Know where you stand.<br><span class="blue">Plan what comes next.</span></h2><p>Calculate weighted class grades, test final-exam scenarios, and estimate your GPA on 4.0 and weighted 5.0 scales.</p></section>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="row" style="align-items:center;justify-content:space-between;flex-wrap:wrap">
+      <div><h3 style="margin-bottom:3px">Your classes</h3><div class="small">Add a class, then edit its categories below.</div></div>
+      <div class="row" style="align-items:center"><div class="field" style="margin:0;min-width:150px"><input id="newClass" placeholder="e.g. Biology" aria-label="New class name"></div><button id="addClass">+ Add class</button></div>
+    </div>
+    <div class="class-list" id="classList"><button class="class-chip active">Math</button><button class="class-chip">English</button></div>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <h3 id="classTitle">Math grade setup</h3>
+      <div class="row">
+        <div class="field"><label for="classCredits">Class credits (for GPA)</label><input id="classCredits" type="number" min=".1" step=".1" value="1"></div>
+        <div class="field"><label for="currentTarget">Target overall grade (%)</label><input id="currentTarget" type="number" min="0" max="100" value="90"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">Grade categories</h3><span class="small">Weights should total 100%</span></div>
+      <div class="category small" style="font-weight:700"><span>Category</span><span>Grade %</span><span>Weight %</span><span></span></div>
+      <div id="categories"><div class="category"><input aria-label="Category name" value="Homework"><input aria-label="Grade percent" type="number" min="0" max="100" step=".1" value="90"><input aria-label="Category weight percent" type="number" min="0" max="100" step=".1" value="20"><button class="danger" aria-label="Remove category" title="Remove">×</button></div><div class="category"><input aria-label="Category name" value="Quizzes"><input aria-label="Grade percent" type="number" min="0" max="100" step=".1" value="85"><input aria-label="Category weight percent" type="number" min="0" max="100" step=".1" value="20"><button class="danger" aria-label="Remove category" title="Remove">×</button></div><div class="category"><input aria-label="Category name" value="Tests"><input aria-label="Grade percent" type="number" min="0" max="100" step=".1" value="92"><input aria-label="Category weight percent" type="number" min="0" max="100" step=".1" value="40"><button class="danger" aria-label="Remove category" title="Remove">×</button></div></div>
+      <div class="actions"><button class="secondary" id="addCategory">+ Add category</button><button class="secondary" id="resetWeights">Reset example</button></div>
+      <div class="divider"></div>
+      <h3>Final exam</h3>
+      <div class="row">
+        <div class="field"><label for="finalWeight">Final exam weight (%)</label><input id="finalWeight" type="number" min="0" max="100" value="20"></div>
+        <div class="field"><label for="finalScore">Predicted final score (%)</label><input id="finalScore" type="number" min="0" max="100" value="85"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="neededTarget">Target overall grade (%)</label><input id="neededTarget" type="number" min="0" max="100" value="90"></div>
+        <div class="field"><label>Required final score</label><div class="result" style="margin:0;padding:9px 12px"><b id="neededScore" class="orange">91.0%</b></div></div>
+      </div>
+      <p class="note" id="weightNote">Category weights total 80.0%. With a 20.0% final, categories should total 80.0%.</p>
+    </section>
+
+    <aside class="card">
+      <h3>Grade results</h3>
+      <div class="result"><div class="small">Projected overall grade</div><div class="big green" id="overall">88.8%</div><div class="bar"><div id="gradeBar" style="width: 88.8%;"></div></div><div class="small" id="status">Weights total 100%.</div></div>
+      <div class="stats">
+        <div class="stat"><span>Current category average</span><b id="currentAverage">89.8%</b></div>
+        <div class="stat"><span>Weighted points earned</span><b id="weightedPoints">71.8</b></div>
+      </div>
+      <div class="divider"></div>
+      <h3>GPA estimate</h3>
+      <div class="stats">
+        <div class="stat"><span>4.0 scale</span><b class="blue" id="gpa4">3.00</b></div>
+        <div class="stat"><span>Weighted 5.0 scale</span><b class="blue" id="gpa5">3.00</b></div>
+      </div>
+      <div class="field" style="margin-top:14px"><label for="gpaPolicy">Grade-to-GPA policy</label>
+        <select id="gpaPolicy">
+          <option value="standard">Common +/- scale (editable assumptions)</option>
+          <option value="whole">Whole-letter scale (A/B/C/D/F)</option>
+        </select>
+      </div>
+      <p class="note">This is a GPA estimate for the selected class. Your school's grading and honors/AP rules may differ. The 5.0 estimate adds 1 point for an honors/AP class when enabled.</p>
+      <div class="field"><label><input id="weightedClass" type="checkbox" style="width:auto;margin-right:8px">This is an honors/AP class (adds 1.0 on 5.0 scale)</label></div>
+      <div class="divider"></div>
+      <h3>How GPA works</h3>
+      <p class="small">A cumulative GPA normally combines each class's GPA points weighted by its credits. Add more classes and use each class's results to calculate an overall GPA in a future version.</p>
+    </aside>
+  </div>
+  <footer>GradeMaster starter • Calculations happen in your browser. No account needed.</footer>
+</div>
+<script>
+const defaults=()=>[
+ {name:"Homework",grade:90,weight:20},
+ {name:"Quizzes",grade:85,weight:20},
+ {name:"Tests",grade:92,weight:40}
+];
+let classes=[{id:1,name:"Math",credits:1,categories:defaults(),finalWeight:20,finalScore:85,target:90,weighted:false},
+{id:2,name:"English",credits:1,categories:[{name:"Essays",grade:94,weight:35},{name:"Reading",grade:88,weight:35},{name:"Participation",grade:96,weight:10}],finalWeight:20,finalScore:90,target:90,weighted:false}];
+let active=1, nextId=3;
+const $=id=>document.getElementById(id);
+const num=v=>Number.isFinite(Number(v))?Number(v):0;
+function current(){return classes.find(c=>c.id===active)}
+function renderClassList(){
+ $('classList').innerHTML='';
+ classes.forEach(c=>{let b=document.createElement('button');b.className='class-chip'+(c.id===active?' active':'');b.textContent=c.name;b.onclick=()=>{saveInputs();active=c.id;renderAll()};$('classList').appendChild(b)});
+}
+function renderCategories(){
+ const c=current();$('categories').innerHTML='';
+ c.categories.forEach((cat,i)=>{
+  const row=document.createElement('div');row.className='category';
+  row.innerHTML=`<input aria-label="Category name" value="${escapeHtml(cat.name)}"><input aria-label="Grade percent" type="number" min="0" max="100" step=".1" value="${cat.grade}"><input aria-label="Category weight percent" type="number" min="0" max="100" step=".1" value="${cat.weight}"><button class="danger" aria-label="Remove category" title="Remove">×</button>`;
+  const inputs=row.querySelectorAll('input');
+  inputs[0].oninput=()=>{cat.name=inputs[0].value;calculate()};
+  inputs[1].oninput=()=>{cat.grade=num(inputs[1].value);calculate()};
+  inputs[2].oninput=()=>{cat.weight=num(inputs[2].value);calculate()};
+  row.querySelector('button').onclick=()=>{c.categories.splice(i,1);renderCategories();calculate()};
+  $('categories').appendChild(row);
+ });
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function saveInputs(){
+ const c=current();if(!c)return;
+ c.credits=num($('classCredits').value)||1;c.target=num($('currentTarget').value);
+ c.finalWeight=num($('finalWeight').value);c.finalScore=num($('finalScore').value);c.target=num($('neededTarget').value);c.weighted=$('weightedClass').checked;
+}
+function renderAll(){
+ renderClassList();const c=current();$('classTitle').textContent=c.name+' grade setup';
+ $('classCredits').value=c.credits;$('currentTarget').value=c.target;$('neededTarget').value=c.target;
+ $('finalWeight').value=c.finalWeight;$('finalScore').value=c.finalScore;$('weightedClass').checked=c.weighted;
+ renderCategories();calculate();
+}
+function pointsForGrade(g,whole=false){
+ if(whole){if(g>=90)return 4;if(g>=80)return 3;if(g>=70)return 2;if(g>=60)return 1;return 0}
+ if(g>=97)return 4;if(g>=93)return 3.7;if(g>=90)return 3.3;if(g>=87)return 3.0;if(g>=83)return 2.7;if(g>=80)return 2.3;if(g>=77)return 2.0;if(g>=73)return 1.7;if(g>=70)return 1.3;if(g>=67)return 1.0;if(g>=63)return .7;if(g>=60)return .3;return 0;
+}
+function calculate(){
+ const c=current();if(!c)return;
+ const fw=num($('finalWeight').value),fs=num($('finalScore').value),sum=c.categories.reduce((a,x)=>a+num(x.weight),0);
+ const earned=c.categories.reduce((a,x)=>a+num(x.grade)*num(x.weight)/100,0);
+ const currentAvg=sum?c.categories.reduce((a,x)=>a+num(x.grade)*num(x.weight),0)/sum:0;
+ const projected=earned+fs*fw/100;
+ const total=sum+fw;
+ $('currentAverage').textContent=sum?currentAvg.toFixed(1)+'%':'—';
+ $('weightedPoints').textContent=earned.toFixed(1);
+ $('overall').textContent=total?projected.toFixed(1)+'%':'—';
+ $('gradeBar').style.width=Math.max(0,Math.min(100,projected))+'%';
+ $('status').textContent=Math.abs(total-100)<.01?'Weights total 100%.':`Weights total ${total.toFixed(1)}% (should be 100%).`;
+ $('weightNote').textContent=`Category weights total ${sum.toFixed(1)}%. With a ${fw.toFixed(1)}% final, categories should total ${(100-fw).toFixed(1)}%.`;
+ const target=num($('neededTarget').value), remaining=100-fw;
+ const needed=fw>0?(target-earned)/ (fw/100):NaN;
+ $('neededScore').textContent=Number.isFinite(needed)?(needed<=0?'0% (already there)':needed>100?`>${needed.toFixed(1)}% needed`:`${needed.toFixed(1)}%`):'No final exam';
+ const whole=$('gpaPolicy').value==='whole';const g4=pointsForGrade(projected,whole);
+ $('gpa4').textContent=total?g4.toFixed(2):'—';
+ $('gpa5').textContent=total?Math.min(5,g4+($('weightedClass').checked?1:0)).toFixed(2):'—';
+}
+$('addClass').onclick=()=>{let name=$('newClass').value.trim();if(!name)name='New class';classes.push({id:nextId++,name,credits:1,categories:defaults(),finalWeight:20,finalScore:85,target:90,weighted:false});active=classes[classes.length-1].id;$('newClass').value='';renderAll()};
+$('addCategory').onclick=()=>{saveInputs();current().categories.push({name:'New category',grade:0,weight:0});renderCategories();calculate()};
+$('resetWeights').onclick=()=>{saveInputs();current().categories=defaults();renderCategories();calculate()};
+['classCredits','currentTarget','finalWeight','finalScore','neededTarget','gpaPolicy','weightedClass'].forEach(id=>$(id).addEventListener('input',()=>{saveInputs();calculate()}));
+renderAll();
+</script>
+</body></html>
